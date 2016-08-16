@@ -12,6 +12,8 @@ public class DiceGame {
 		int numOfRolls = 1;
 		int upperBound = 6;
 		int lowerBound = 1;
+		int randomNumber2 = 0;
+		int twoDieTotal = 0;
 		
 		// Random seed generator
 		long seed = (new Date()).getTime();
@@ -19,17 +21,23 @@ public class DiceGame {
 		
 		// Generate initial random roll
 		randomNumber = rnd.nextInt(upperBound - lowerBound) + lowerBound;
+		randomNumber2 = rnd.nextInt(upperBound - lowerBound) + lowerBound;
+		twoDieTotal = randomNumber + randomNumber2;
 		
-		//System.out.println("Dice roll number: " + numOfRolls);
-		//System.out.printf("%d\n", randomNumber);
-
-		// Loop until the dice roll = 1
-		while(randomNumber != 1) {
-			totalRndNum = totalRndNum + randomNumber;
+		//System.out.println("Dice roll number:                     " + numOfRolls);
+		//System.out.printf("1st single die total is: %d\n", randomNumber);
+		//System.out.printf("2nd single die is: %d\n", randomNumber2);
+		//System.out.printf("The 2 die total is  %d\n", twoDieTotal);
+	
+		// Loop until the dice roll = 7
+		while(twoDieTotal != 7) {
+			totalRndNum = totalRndNum + twoDieTotal;
 			numOfRolls += 1;
 			randomNumber = rnd.nextInt(upperBound - lowerBound) + lowerBound;
-			//System.out.println("Dice roll number: " + numOfRolls);
-			//System.out.println(randomNumber);
+			randomNumber2 = rnd.nextInt(upperBound - lowerBound) + lowerBound;
+			twoDieTotal = randomNumber + randomNumber2;
+			//System.out.println("Dice roll number:                     " + numOfRolls);
+			//System.out.println("The 2 die total is: " + twoDieTotal);
 		}
 		
 		// Print final statistics
