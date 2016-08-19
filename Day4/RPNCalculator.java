@@ -107,17 +107,18 @@ public class RPNCalculator {
 			arg1 = showpop(stk);
 			arg2 = showpop(stk);
 			operator = popOperator(stk);
-			System.out.printf("Calculating %d,%d,%c\n", arg1, arg2, operator);			
+			System.out.printf("Calculating %d,%d,%c. ", arg1, arg2, operator);			
 			opResult = performOp(arg1, arg2, operator);
-			System.out.printf("The result is %d.\n", opResult);
+			System.out.printf("The answer is %d.\n", opResult);
 			
 			// Check for empty stack. If not empty, push the result back in and continue loop
 			if (stk.empty()) {
-				System.out.println("The stack is empty.");
+				//System.out.println("The stack is empty.");
+				continue;
 			}
 			else {
 				char b = Integer.toString(opResult).charAt(0);
-				System.out.printf("Stack is not empty. Pushing %c back in.\n", b);
+				//System.out.printf("Stack is not empty. Pushing %c back in.\n", b);
 				showpush(stk, b);
 			}
 		}
