@@ -4,14 +4,21 @@ import java.util.*;
 
 public class RPNCalculator {
 
-	// Pushes type to stack
-	static void showpush(Stack st, int a) {
-	     st.push(new Integer(a));
-	     //System.out.println("push(" + a + ")");
-	     //System.out.println("stack: " + st);
+	// Pushes integer to stack
+	static void pushInt(Stack st, int a) {
+		st.push(Character.getNumericValue(a));
+	    //System.out.println("push(" + a + ")");
+	    //System.out.println("stack: " + st);
+	}
+	
+	// Pushes operator type to stack
+	static void pushOp(Stack st, int a) {
+	    st.push(new Integer(a));
+	    //System.out.println("push(" + a + ")");
+	    //System.out.println("stack: " + st);
 	}
 
-	// Pops the operator from the stack and returns it
+	// Pops the operator from the stack
 	static char popOperator(Stack st) {
 		 //System.out.print("pop operator-> ");
 	     Integer a = (Integer) st.pop();
@@ -19,6 +26,15 @@ public class RPNCalculator {
 	     char op = isOperator(a);
 	     //System.out.println("stack: " + st);
 	     return op;
+	}
+	
+	// Pops number from the stack
+	static int popInt(Stack st) {
+	     //System.out.print("pop int -> ");
+	     int a = (int)st.pop();
+	     //System.out.println(a);
+	     //System.out.println("stack: " + st);
+	     return a;
 	}
 	
 	// Checks and returns operator type as a char
@@ -45,16 +61,7 @@ public class RPNCalculator {
 		return opType;
 	}
 	
-	// Pops from the stack returning an int type
-	static int showpop(Stack st) {
-	     //System.out.print("pop -> ");
-	     Integer a = (Integer) st.pop();
-	     //System.out.println(a);
-	     int NumericA = Character.getNumericValue(a);
-	     //System.out.println("stack: " + st);
-	     return NumericA;
-	}
-	
+
 	//Perform calculation
 	static int performOp(int arg1, int arg2, char opType) {
 		int result = 0;
@@ -89,23 +96,29 @@ public class RPNCalculator {
 		
 		int arg1;
 		int arg2;
-		int opResult;
+		int opResult = 0;
 		char operator;
 
-		char[] problem = new char[] {'6','2','/','1','-','2','*','4','+','3','/'};		
+		//char[] problem = new char[] {'6','2','/','1','-','2','*','4','+','3','/'};		
+		char[] problem = new char[] {'1','2','+','3','+','2','*','4','/'};	
 		
 		Stack<Integer> stk = new Stack<Integer>();
 		//System.out.println("stack: " + stk);
 		
 		// Push the problem to the stack
 		for (int probIndex=0 ; probIndex < problem.length; probIndex++) {
-			showpush(stk, problem[(problem.length - 1) - probIndex]);
+			if (Character.getNumericValue(problem[(problem.length - 1) - probIndex]) == -1) {
+				pushOp(stk, problem[(problem.length - 1) - probIndex]);
+			}
+			else {
+				pushInt(stk, problem[(problem.length - 1) - probIndex]);
+			}
 		}
 
 		// Pop from the stack and perform calculations
 		while (!(stk.empty())) {				
-			arg1 = showpop(stk);
-			arg2 = showpop(stk);
+			arg1 = popInt(stk);
+			arg2 = popInt(stk);
 			operator = popOperator(stk);
 			System.out.printf("Calculating %d,%d,%c. ", arg1, arg2, operator);			
 			opResult = performOp(arg1, arg2, operator);
@@ -117,11 +130,13 @@ public class RPNCalculator {
 				continue;
 			}
 			else {
-				char b = Integer.toString(opResult).charAt(0);
-				//System.out.printf("Stack is not empty. Pushing %c back in.\n", b);
-				showpush(stk, b);
+				System.out.printf("Stack is not empty. Pushing %d back in.\n", opResult);
+				stk.push(opResult);
 			}
 		}
+		stk.push(opResult);
+		System.out.println("The final answer is " + opResult);
+		System.out.println("stack: " + stk);
 	}
 	
 }
