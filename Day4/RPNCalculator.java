@@ -125,15 +125,12 @@ public class RPNCalculator {
 			System.out.printf("The answer is %d.\n", opResult);
 			
 			// Check for empty stack. If not empty, push the result back in and continue loop
-			if (stk.empty()) {
-				//System.out.println("The stack is empty.");
-				continue;
-			}
-			else {
+			if (!(stk.empty())) {
 				System.out.printf("Stack is not empty. Pushing %d back in.\n", opResult);
 				stk.push(opResult);
 			}
 		}
+		
 		stk.push(opResult);
 		System.out.println("The final answer is " + opResult);
 		System.out.println("stack: " + stk);
