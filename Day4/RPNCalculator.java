@@ -25,10 +25,22 @@ public class RPNCalculator {
 	static char isOperator(Integer op) {
 		char opType = ' '; 
 		switch (op) {
-        case 43:  return opType = '+';
-        case 45:  return opType = '-';
-        case 42:  return opType = '*';
-        case 47:  return opType = '/';
+        case 43:  {
+        	opType = '+';
+        	break;
+        }
+        case 45:  {
+        	opType = '-';
+        	break;
+        }
+        case 42:  {
+        	opType = '*';
+        	break;
+        }
+        case 47:  {
+        	opType = '/';
+        	break;
+        }
         }
 		return opType;
 	}
@@ -74,13 +86,13 @@ public class RPNCalculator {
 	}
 	
 	public static void main(String[] args) {
-
+		
 		int arg1;
 		int arg2;
 		int opResult;
 		char operator;
 
-		char[] problem = new char[] {'6','2','/','1','-','2','*'};
+		char[] problem = new char[] {'6','2','/','1','-','2','*','4','+','3','/'};		
 		
 		Stack<Integer> stk = new Stack<Integer>();
 		//System.out.println("stack: " + stk);
@@ -91,17 +103,11 @@ public class RPNCalculator {
 		}
 
 		// Pop from the stack and perform calculations
-		for (int probIndex=0 ; probIndex < problem.length; probIndex++) {
-			
-			// Pop the 3 arguments and calculate
+		while (!(stk.empty())) {				
 			arg1 = showpop(stk);
-			probIndex++;
 			arg2 = showpop(stk);
-			probIndex++;
 			operator = popOperator(stk);
-			probIndex++;			
-			System.out.printf("Calculating %d,%d,%c\n", arg1, arg2, operator);
-			
+			System.out.printf("Calculating %d,%d,%c\n", arg1, arg2, operator);			
 			opResult = performOp(arg1, arg2, operator);
 			System.out.printf("The result is %d.\n", opResult);
 			
@@ -113,7 +119,6 @@ public class RPNCalculator {
 				char b = Integer.toString(opResult).charAt(0);
 				System.out.printf("Stack is not empty. Pushing %c back in.\n", b);
 				showpush(stk, b);
-				--probIndex;
 			}
 		}
 	}
