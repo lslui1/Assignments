@@ -21,6 +21,7 @@ public class Mainline {
 		checkBalance = checkings.withdraw("600.00");
 		System.out.println(checkings.displayAcct());
 		checkBalance = checkings.deposit("100.00");
+		System.out.println(checkings.displayAcct());
 		checkBalance = checkings.withdraw("300.00");
 		System.out.println(checkings.displayAcct());
 		checkBalance = checkings.withdraw("200.00");

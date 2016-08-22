@@ -4,6 +4,7 @@ package ssa;
 public class Account
 {
     private static int idCounter = 100;
+    private static int transCounter = 1;
     private int accountId;
 	@SuppressWarnings("unused")
 	private String description;
@@ -11,7 +12,11 @@ public class Account
     private String[] type = {"checkings", "savings"};
     private double balance = 0;    
 
-    
+    public static synchronized int createTransID()
+    {
+        // return String.valueOf(idCounter++);
+    	return transCounter++;
+    }
     // Automatically generate account ID starting from 100
     public static synchronized int createID()
     {
@@ -66,6 +71,7 @@ public class Account
     	double number = Double.parseDouble(depositAmt);
     	
     	balance += number;
+    	generateTrans("Deposit", depositAmt);
     	return getBalance();
     }
     
@@ -75,7 +81,9 @@ public class Account
     	
     	if (balance >= number) {
     		balance -= number;
+    		generateTrans("Withdrawal", withdrawAmt);
 		} 	else {
+			generateTrans("Invalid withdrawal", withdrawAmt);
 			System.out.println("Invalid transaction. Reason: Insufficient Funds.\n");
 			}			
     	return getBalance();
@@ -103,7 +111,14 @@ public class Account
     		tempBal = remFromAcct.withdraw(transferAmt);
     		balance += number1;
     	} else {
+    		generateTrans("Invalid transfer transaction", transferAmt);
     		System.out.println("Invalid transaction. Reason: Insufficient Funds to transfer.\n");
     		}
+    }
+    
+    public void generateTrans(String transType, String amt) {
+    	
+    	int newTrans = createTransID();
+    	System.out.println("Transaction ID: " + newTrans + " - Transaction Type: " + transType + " - Trans Amount: " + amt);
     }
 }
