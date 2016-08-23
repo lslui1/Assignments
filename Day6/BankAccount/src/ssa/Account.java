@@ -1,124 +1,189 @@
 package ssa;
 
+import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class Account
 {
-    private static int idCounter = 100;
-    private static int transCounter = 1;
+    private static int idCounter = 1;
+    private static Map<Integer, Transaction> transMap = new HashMap<>(); // transaction records
     private int accountId;
-	@SuppressWarnings("unused")
-	private String description;
+	private String description = null;
     private String acctType;
     private String[] type = {"checkings", "savings"};
-    private double balance = 0;    
-
-    public static synchronized int createTransID()
-    {
-        // return String.valueOf(idCounter++);
-    	return transCounter++;
+    private double balance;    
+    NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
+    
+    // private method to set the balance
+    private void setBalance() {
+    	this.balance = 0;
     }
-    // Automatically generate account ID starting from 100
-    public static synchronized int createID()
+    
+    // private method to set the account Id
+    private void setId(int aId) {
+    	this.accountId = aId;
+    }
+    
+    // Automatically generate account ID starting from 1
+    private static synchronized int createID()
     {
-        // return String.valueOf(idCounter++);
     	return idCounter++;
     }
     
-    Account()
+    // Resync the idCounter index to maintain unique Id's for bank accounts
+    private static synchronized void syncID(int currentId)
     {
-    	accountId = createID();
+    	idCounter = ++currentId;
     }
-
-/*  Constructors for manually setting account IDs  
-    Account() {}
     
-    Account(int aId) {
-    	accountId = aId;
+    // default constructor
+    public Account()
+    {
+    	this.accountId = createID();
+    	setBalance();
     }
-   
-    public void setId(int aId) {
-    	accountId = aId;
-    }
-*/
     
+    // constructor with description argument
+    public Account(String aDescription)
+    {
+    	this.accountId = createID();
+    	setBalance();
+    	this.setDescription(aDescription);
+    }
+    
+    // constructor with account Id and description arguments
+    public Account(int aId, String aDescription)
+    {
+    	if ((aId > 0) && (aId > idCounter)) {
+    		setId(aId);
+        	setBalance();
+        	this.setDescription(aDescription);
+        	syncID(aId);
+    	} else {
+    		System.out.println(aId + "is an invalid account Id. Please try again");
+    	}
+    }  
+    
+    // return account Id
     public int getId() {
-    	return accountId;
+    	return this.accountId;
     }
     
+    // set the description. Parses the description and also tries to set the account type.
     public void setDescription(String aDescription) {
-    	description = aDescription;
+    	this.description = aDescription;
+    	
+    	if (aDescription.toLowerCase().contains("checking")) {
+    		this.setAccountType(0);
+    	} else {
+    			if (aDescription.toLowerCase().contains("saving")) {
+    				this.setAccountType(1);
+    			}
+    	}
     }
 
-    public String getDescription(String aDescription) {
-    	return aDescription;
+    // returns description
+    public String getDescription() {
+    	return this.description;
     }
     
-    public String getBalance() {   	
-    	return String.format("%.2f", balance);
-
+    // returns the balance
+    public double getBalance() {   	
+    	return this.balance;
     }
     
+    // sets the account type
     public void setAccountType(int aType) {
-    	acctType = type[aType];
+    	if (aType == 0 || aType == 1) {
+        	this.acctType = this.type[aType];
+    	} else {
+    		System.out.println("Invalid account type. Please select 0 for checking or 1 for savings");
+    	}
     }
     
+    // returns account type
     public String getAccountType() {
-    	return acctType;
+    	return this.acctType;
     }
 
-    public String deposit(String depositAmt) {
+    // deposits and returns the balance
+    public double deposit(double depositAmt) {
     	
-    	double number = Double.parseDouble(depositAmt);
-    	
-    	balance += number;
+    	this.balance += depositAmt;
     	generateTrans("Deposit", depositAmt);
     	return getBalance();
     }
     
-    public String withdraw(String withdrawAmt) {
-		
-    	double number = Double.parseDouble(withdrawAmt);
-    	
-    	if (balance >= number) {
-    		balance -= number;
+    // withdraws and returns the balance
+    public double withdraw(double withdrawAmt) {
+		    	
+    	if (this.balance >= withdrawAmt) {
+    		this.balance -= withdrawAmt;
     		generateTrans("Withdrawal", withdrawAmt);
 		} 	else {
 			generateTrans("Invalid withdrawal", withdrawAmt);
-			System.out.println("Invalid transaction. Reason: Insufficient Funds.\n");
+			System.out.println("Invalid transaction. Reason: Insufficient Funds.");
 			}			
     	return getBalance();
 	}
 
+    // Display account status
     public String displayAcct() {
     	String fullDesc = null;
     	
-    	String idString = " Account ID: " + Integer.toString(accountId) + "\n";
-    	String typeString = " Account Type: " + acctType + " - Description: " + description + "\n";
-    	String balanceString = " Account balance: " + this.getBalance() + "\n";
+    	String headerString = "                              ----------------Account Status-------------\n";
+    	String idString = "                              Account ID: " + Integer.toString(this.accountId) + "\n";
+    	String typeString = "                              Account Type: " + this.acctType + " - Description: " + description + "\n";
+    	String balanceString = "                              Account balance: " + String.format("%.2f", this.getBalance()) + "\n";
+    	String footerString = "                              -------------------------------------------\n";
     	
-    	fullDesc = idString + typeString + balanceString;
+    	fullDesc = headerString + idString + typeString + balanceString + footerString;
     	return fullDesc;
     }
 
     // Transfer funds from argument account to current account
-    public void transfer(String transferAmt, Account remFromAcct) {
+    public void transferFrom(Account remFromAcct, double transferAmt) {
     	
-    	double number2 = Double.parseDouble((remFromAcct.getBalance()));
-    	double number1 = Double.parseDouble(transferAmt);
-    	String tempBal;
+    	double number2 = remFromAcct.getBalance();
+    	double number1 = transferAmt;
     	
     	if (number2 >= number1) {
-    		tempBal = remFromAcct.withdraw(transferAmt);
-    		balance += number1;
+    		remFromAcct.withdraw(transferAmt);
+    		this.deposit(transferAmt);
     	} else {
     		generateTrans("Invalid transfer transaction", transferAmt);
-    		System.out.println("Invalid transaction. Reason: Insufficient Funds to transfer.\n");
+    		System.out.println("Invalid transaction. Reason: Insufficient Funds to transfer.");
     		}
     }
     
-    public void generateTrans(String transType, String amt) {
-    	
-    	int newTrans = createTransID();
-    	System.out.println("Transaction ID: " + newTrans + " - Transaction Type: " + transType + " - Trans Amount: " + amt);
+    // Generate transaction data instance and store in transaction Map
+    public void generateTrans(String transType, double amt) { 	
+    	Transaction trans = new Transaction();
+    	trans.addTrans(accountId, acctType, transType, amt);
+        transMap.put(trans.getTransactionId(), trans);
+        // trans.displayTrans();
     }
+    
+    // Display all transaction data for this account
+    public void displayTrans() {
+    	System.out.println("-------------------------------------------------------------");
+    	System.out.println("        Transaction data for account Id: " + accountId);
+		System.out.println("-------------------------------------------------------------");
+    	for (Entry<Integer, Transaction> entry : transMap.entrySet()) {
+    		//System.out.println("Transaction ID : " + entry.getKey() + " | Data : " + entry.getValue());    		
+    		if ( (entry.getValue()).getAcctId() == this.accountId ) {
+    			(entry.getValue()).displayTrans();
+    		}
+    	}
+    }
+    	
+    // return short balance data
+    public String print() {
+    	// return ("Account " + this.getId() + " balance is $" + String.format("%.2f", this.getBalance())) ;
+    	return ("Account " + this.getId() + " balance is " + nf.format(this.getBalance()));
+    }
+
 }
