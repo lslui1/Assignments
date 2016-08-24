@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 public class Account
 {
     private static int idCounter = 1;
-    private static Map<Integer, Transaction> transMap = new HashMap<>(); // transaction records
     private int accountId;
 	private String description = null;
     private String acctType;
@@ -113,7 +112,6 @@ public class Account
     public double deposit(double depositAmt) {
     	
     	this.balance += depositAmt;
-    	generateTrans("Deposit", depositAmt);
     	return getBalance();
     }
     
@@ -122,10 +120,8 @@ public class Account
 		    	
     	if (this.balance >= withdrawAmt) {
     		this.balance -= withdrawAmt;
-    		generateTrans("Withdrawal", withdrawAmt);
 		} 	else {
-			generateTrans("Invalid withdrawal", withdrawAmt);
-			System.out.println("Invalid transaction. Reason: Insufficient Funds.");
+				System.out.println("Invalid transaction. Reason: Insufficient Funds.");
 			}			
     	return getBalance();
 	}
@@ -154,30 +150,8 @@ public class Account
     		remFromAcct.withdraw(transferAmt);
     		this.deposit(transferAmt);
     	} else {
-    		generateTrans("Invalid transfer transaction", transferAmt);
     		System.out.println("Invalid transaction. Reason: Insufficient Funds to transfer.");
     		}
-    }
-    
-    // Generate transaction data instance and store in transaction Map
-    public void generateTrans(String transType, double amt) { 	
-    	Transaction trans = new Transaction();
-    	trans.addTrans(accountId, acctType, transType, amt);
-        transMap.put(trans.getTransactionId(), trans);
-        // trans.displayTrans();
-    }
-    
-    // Display all transaction data for this account
-    public void displayTrans() {
-    	System.out.println("-------------------------------------------------------------");
-    	System.out.println("        Transaction data for account Id: " + accountId);
-		System.out.println("-------------------------------------------------------------");
-    	for (Entry<Integer, Transaction> entry : transMap.entrySet()) {
-    		//System.out.println("Transaction ID : " + entry.getKey() + " | Data : " + entry.getValue());    		
-    		if ( (entry.getValue()).getAcctId() == this.accountId ) {
-    			(entry.getValue()).displayTrans();
-    		}
-    	}
     }
     	
     // return short balance data
