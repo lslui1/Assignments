@@ -11,7 +11,11 @@ import java.util.TreeMap;
 
 public class Student {
 
-	public String searchItem = "306700";
+//	public String searchItem = "001122";   // test first student
+//	public String searchItem = "772223";   // test last student
+//	public String searchItem = "010101";   // test bogus student
+	public String searchItem = "306700";   // test on myself
+	
     public String id; 
     public String firstName;
     public String lastName;
@@ -194,15 +198,36 @@ public class Student {
 		System.out.println("Empl Id   First name         Last name          Eye color   Months at SSA");
 		System.out.println("=======   ================   ================   =========   =============");
 		
+		Map.Entry<String, Student> result2 = null;
 		for (Map.Entry<String, Student> e : sortedMap.entrySet()) {
 			if (e.getKey() == searchItem) {
-				Map.Entry<String, Student> result2 = e;                                // current or searchItem		
+				result2 = e;                                // current or searchItem		
 				Map.Entry<String, Student> result1 = sortedMap.lowerEntry(e.getKey());  // previous		
 				Map.Entry<String, Student> result3 = sortedMap.higherEntry(e.getKey()); // next
+				if (result1 == null) {
+					System.out.println("result1 is null");
+					printStudent(result2.getValue());
+					printStudent(result3.getValue());
+					Map.Entry<String, Student> result4 = sortedMap.higherEntry(result3.getKey());
+					printStudent(result4.getValue());
+				}
+				if (result3 == null) {
+					System.out.println("result3 is null");
+					Map.Entry<String, Student> result0 = sortedMap.lowerEntry(result1.getKey());
+					printStudent(result0.getValue());
+					printStudent(result1.getValue());
+					printStudent(result2.getValue());
+				}
+				if ((result1 != null) && (result3 != null)) {
 				printStudent(result1.getValue());
 				printStudent(result2.getValue());
 				printStudent(result3.getValue());	
+				}
+			} else {
+				if ((sortedMap.lastKey() == e.getKey()) && (result2 == null))
+				System.out.println("Student not found");
 			}
+			
 		}			    
 	}
 	
