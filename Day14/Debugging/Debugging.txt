@@ -1,0 +1,71 @@
+Debugging List:
+
+* DiceGame
+	-Traced through. No bugs found.
+
+* SimpleCraps
+	-Traced through. No bugs found.
+
+* RPNCalculator
+	-Traced through. No bugs found(for what it was intended). 
+	Limited to only single digit <initial> calculations (since the input numbers were of type char)
+	
+	Refactored: (in order to handle more complex numbers)
+
+	Modified to take input as a single String and split using spaces as delimiter: 
+		String[] splitString = inputString.split("\\s+");
+	Looped and added to ArrayList instead of a stack:
+		List<String> list = new ArrayList<String>();
+		for (int strIndex=0 ; strIndex < splitString.length; strIndex++) {
+			list.add(splitString[strIndex]);
+		}
+	Stored everything in the list as String type. For calculations, converted to BigDecimal:
+		private static String calc(String argStr1, String argStr2, String argOp) {
+		
+		BigDecimal bg1, bg2, bg3 = null;
+		MathContext mc = new MathContext(4); // 4 precision
+		
+	  	 bg1 = new BigDecimal(argStr1);
+	    	bg2 = new BigDecimal(argStr2);
+		
+		switch (argOp) {
+        	case "+":  {
+        	bg3 = bg1.add(bg2, mc);
+        	break;
+        	etc ...
+	These changes cut the code by almost half.
+	Traced through. Found no bugs in refactored RPNCalculator (as long as the String input followed the correct RPN format)
+
+* BowlingGame
+	-Traced through. No bugs found in basic program. Never got the Pro working right.
+	Not necessarily a bug but a numeric display formatting method to pad and right justify had no checks against negative numbers. 
+	"public String formatScore(int aScore)"
+	Added return String of "-1" and error message on "if (aScore < 0) {" condition.
+
+* BankAccount
+	-JUnit testing on this assignment and on the Bank statement assignment covered almost all cases.
+	No bugs found.
+
+* TheBankStatement
+	-An unhandled for parsing a string percentage interest rate when converting the string input to double. Invalid strings
+	caused a floating point exception error.
+
+	Modification: added a try/catch for numberFormattingException when casting a string input to double
+		try {
+			doubleIntRate = Double.valueOf(strippedIntRate) / 100;
+		}
+		catch (NumberFormatException x) {
+			System.out.println("invalid interest rate argument. Interest rate reset to 0.00");
+			doubleIntRate = 0;
+		}
+
+
+* ClassRoster
+	-No bugs found.
+
+* ClassRosterAndDatabase
+	-Other than validating boundaries of numerical input in constructors or set methods, there were no real bugs found.
+
+
+
+	
