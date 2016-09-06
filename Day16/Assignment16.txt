@@ -1,0 +1,205 @@
+
+---------------------------------1----------------------------
+mysql> select first_name, last_name
+    -> from student;
++------------+-----------+
+| first_name | last_name |
++------------+-----------+
+| Eric       | Ephram    |
+| Greg       | Gould     |
+| Adam       | Ant       |
+| Howard     | Hess      |
+| Charles    | Caldwell  |
+| James      | Joyce     |
+| Doug       | Dumas     |
+| Kevin      | Kraft     |
+| Frank      | Fountain  |
+| Brian      | Biggs     |
++------------+-----------+
+10 rows in set (0.00 sec)
+
+
+---------------------------------2----------------------------
+mysql> select * from student
+    -> where years_of_experience < 8;
++-----+------------+-----------+---------------------+------------+
+| id  | first_name | last_name | years_of_experience | start_date |
++-----+------------+-----------+---------------------+------------+
+| 100 | Eric       | Ephram    |                   2 | 2016-03-31 |
+| 110 | Greg       | Gould     |                   6 | 2016-09-30 |
+| 120 | Adam       | Ant       |                   5 | 2016-06-02 |
+| 130 | Howard     | Hess      |                   1 | 2016-02-28 |
+| 140 | Charles    | Caldwell  |                   7 | 2016-05-07 |
+| 170 | Kevin      | Kraft     |                   3 | 2016-04-15 |
+| 190 | Brian      | Biggs     |                   4 | 2015-12-25 |
++-----+------------+-----------+---------------------+------------+
+7 rows in set (0.00 sec)
+
+
+---------------------------------3----------------------------
+mysql> select last_name, start_date, id
+    -> from student
+    -> order by last_name asc;
++-----------+------------+-----+
+| last_name | start_date | id  |
++-----------+------------+-----+
+| Ant       | 2016-06-02 | 120 |
+| Biggs     | 2015-12-25 | 190 |
+| Caldwell  | 2016-05-07 | 140 |
+| Dumas     | 2016-07-04 | 160 |
+| Ephram    | 2016-03-31 | 100 |
+| Fountain  | 2016-01-31 | 180 |
+| Gould     | 2016-09-30 | 110 |
+| Hess      | 2016-02-28 | 130 |
+| Joyce     | 2016-08-27 | 150 |
+| Kraft     | 2016-04-15 | 170 |
++-----------+------------+-----+
+10 rows in set (0.01 sec)
+
+
+---------------------------------4----------------------------
+mysql> select *
+    -> from student
+    -> where first_name = 'Adam' or first_name = 'James' or first_name = 'Frank'
+
+    -> order by last_name desc;
++-----+------------+-----------+---------------------+------------+
+| id  | first_name | last_name | years_of_experience | start_date |
++-----+------------+-----------+---------------------+------------+
+| 150 | James      | Joyce     |                   9 | 2016-08-27 |
+| 180 | Frank      | Fountain  |                   8 | 2016-01-31 |
+| 120 | Adam       | Ant       |                   5 | 2016-06-02 |
++-----+------------+-----------+---------------------+------------+
+3 rows in set (0.00 sec)
+
+
+---------------------------------5----------------------------
+mysql> select first_name, last_name, start_date
+    -> from student
+    -> where start_date between '2016-01-01' and '2016-06-30'
+    -> order by start_date desc;
++------------+-----------+------------+
+| first_name | last_name | start_date |
++------------+-----------+------------+
+| Adam       | Ant       | 2016-06-02 |
+| Charles    | Caldwell  | 2016-05-07 |
+| Kevin      | Kraft     | 2016-04-15 |
+| Eric       | Ephram    | 2016-03-31 |
+| Howard     | Hess      | 2016-02-28 |
+| Frank      | Fountain  | 2016-01-31 |
++------------+-----------+------------+
+6 rows in set (0.00 sec)
+
+
+
+
+---------------------------------advanced--------------------------------------------------------
+Creating the grade table and populating the assignment table, etc.
+--------------------------------------------------------------
+mysql> create table if not exists grade (
+    -> id INT NOT NULL,
+    -> description  CHAR(30)   NOT NULL DEFAULT '',
+    -> PRIMARY KEY (id)
+    -> );
+Query OK, 0 rows affected (0.36 sec)
+
+
+> create index grade_id_idx on assignment(grade_id);
+
+> ALTER TABLE assignment ADD FOREIGN KEY (grade_id) REFERENCES grade(id);
+
+
+mysql> insert into assignment values (1, 100, 1, 1);
+Query OK, 1 row affected (0.06 sec)
+
+etc, etc, etc
+
+mysql> Explain assignment;
++----------------+---------+------+-----+---------+-------+
+| Field          | Type    | Null | Key | Default | Extra |
++----------------+---------+------+-----+---------+-------+
+| id             | int(11) | NO   | PRI | NULL    |       |
+| student_id     | int(11) | NO   | MUL | NULL    |       |
+| assignment_nbr | int(11) | NO   |     | NULL    |       |
+| grade_id       | int(11) | YES  | MUL | NULL    |       |
++----------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from assignment;
++----+------------+----------------+----------+
+| id | student_id | assignment_nbr | grade_id |
++----+------------+----------------+----------+
+|  1 |        100 |              1 |        1 |
+|  2 |        110 |              1 |        2 |
+|  3 |        120 |              1 |        4 |
+|  4 |        130 |              1 |        3 |
+|  5 |        140 |              1 |        1 |
+|  6 |        150 |              1 |        1 |
+|  7 |        160 |              1 |        5 |
+|  8 |        170 |              1 |        4 |
+|  9 |        180 |              1 |        2 |
+| 10 |        190 |              1 |        1 |
+| 11 |        100 |              2 |        1 |
++----+------------+----------------+----------+
+11 rows in set (0.00 sec)
+
+mysql> explain grade;
++-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| id          | int(11)  | NO   | PRI | NULL    |       |
+| description | char(30) | NO   |     |         |       |
++-------------+----------+------+-----+---------+-------+
+2 rows in set (0.02 sec)
+
+mysql> select * from grade;
++----+-----------------------------+
+| id | description                 |
++----+-----------------------------+
+|  1 | Exceeds expectations        |
+|  2 | Complete and satisfactory   |
+|  3 | Complete and unsatisfactory |
+|  4 | Incomplete                  |
+|  5 | Not graded                  |
++----+-----------------------------+
+5 rows in set (0.00 sec)
+
+
+
+
+
+---------------------------------PRO----------------------------
+PRO Challenge
+your create table statement already generated an index on student_id
+---------------------------------7----------------------------
+mysql> show index from assignment;
++------------+------------+----------------+--------------+-------------+-----------+-------------+
+---------+--------+------+------------+---------+---------------+
+| Table      | Non_unique | Key_name       | Seq_in_index | Column_name | Collation | Cardinality |
+Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++------------+------------+----------------+--------------+-------------+-----------+-------------+
+---------+--------+------+------------+---------+---------------+
+| assignment |          0 | PRIMARY        |            1 | id          | A         |          10 |
+    NULL | NULL   |      | BTREE      |         |               |
+| assignment |          1 | student_id_idx |            1 | student_id  | A         |           9 |
+    NULL | NULL   |      | BTREE      |         |               |
++------------+------------+----------------+--------------+-------------+-----------+-------------+
+---------+--------+------+------------+---------+---------------+
+2 rows in set (0.00 sec)
+
+
+mysql> ALTER TABLE assignment
+    -> ADD FOREIGN KEY (student_id) REFERENCES student(id);
+Query OK, 0 rows affected (1.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+---------------------------------7----------------------------
+Testing the FK constraint
+---------------------------------7----------------------------
+mysql> insert into assignment values (100, 1900, 1, 100);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`tiy`.`assignm
+ent`, CONSTRAINT `assignment_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`))
+mysql>
+
+
