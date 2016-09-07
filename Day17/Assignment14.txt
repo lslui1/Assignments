@@ -1,0 +1,160 @@
+mysql> explain class;
++---------------+-------------+------+-----+---------+----------------+
+| Field         | Type        | Null | Key | Default | Extra          |
++---------------+-------------+------+-----+---------+----------------+
+| id            | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name          | varchar(30) | YES  |     |         |                |
+| instructor_id | int(11)     | YES  | MUL | NULL    |                |
++---------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from class;
++----+----------------------+---------------+
+| id | name                 | instructor_id |
++----+----------------------+---------------+
+|  1 | English 101          |             1 |
+|  2 | English 102          |             1 |
+|  3 | English 103          |             1 |
+|  4 | English 201          |             1 |
+|  5 | English 202          |             1 |
+|  6 | English 203          |             1 |
+|  7 | English 301          |             1 |
+|  8 | English 302          |             1 |
+|  9 | English 303          |             1 |
+| 10 | Math 201             |             2 |
+| 11 | Math 202             |             2 |
+| 12 | Math 203             |             2 |
+| 13 | Math 204             |             2 |
+| 14 | Math 301             |             2 |
+| 15 | Math 302             |             2 |
+| 16 | Math 303             |             2 |
+| 17 | Math 304             |             2 |
+| 18 | History 101          |             4 |
+| 19 | History 201          |             4 |
+| 20 | History 301          |             4 |
+| 21 | Computer Science 311 |             3 |
+| 22 | Computer Science 312 |             3 |
+| 23 | Computer Science 313 |             3 |
+| 24 | Computer Science 441 |             3 |
+| 25 | Computer Science 442 |             3 |
+| 26 | Computer Science 443 |             3 |
+| 27 | Psychology 101       |             5 |
+| 28 | Psychology 102       |             5 |
+| 29 | Psychology 231       |             5 |
+| 30 | Psychology 232       |             5 |
+| 31 | Education 221        |             6 |
+| 32 | Education 222        |             6 |
+| 33 | Education 223        |             6 |
+| 34 | Education 351        |             6 |
+| 35 | Education 352        |             6 |
+| 36 | Education 353        |             6 |
++----+----------------------+---------------+
+36 rows in set (0.00 sec)
+
+mysql> explain assignment;
++----------------+---------+------+-----+---------+-------+
+| Field          | Type    | Null | Key | Default | Extra |
++----------------+---------+------+-----+---------+-------+
+| id             | int(11) | NO   | PRI | NULL    |       |
+| student_id     | int(11) | NO   | MUL | NULL    |       |
+| assignment_nbr | int(11) | NO   | MUL | NULL    |       |
+| grade_id       | int(11) | YES  | MUL | NULL    |       |
++----------------+---------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> select * from assignment;
+Empty set (0.00 sec)
+
+mysql> explain grade;
++-------------+----------+------+-----+---------+-------+
+| Field       | Type     | Null | Key | Default | Extra |
++-------------+----------+------+-----+---------+-------+
+| id          | int(11)  | NO   | PRI | NULL    |       |
+| description | char(30) | NO   |     |         |       |
++-------------+----------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> explain instructor;
++------------------+-------------+------+-----+---------+----------------+
+| Field            | Type        | Null | Key | Default | Extra          |
++------------------+-------------+------+-----+---------+----------------+
+| id               | int(11)     | NO   | PRI | NULL    | auto_increment |
+| first_name       | varchar(30) | YES  |     |         |                |
+| last_name        | varchar(30) | YES  |     |         |                |
+| major_id         | int(11)     | YES  | MUL | NULL    |                |
+| years_experience | int(11)     | YES  |     | NULL    |                |
+| tenured          | tinyint(4)  | YES  |     | NULL    |                |
++------------------+-------------+------+-----+---------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from instructor;
++----+------------+-----------+----------+------------------+---------+
+| id | first_name | last_name | major_id | years_experience | tenured |
++----+------------+-----------+----------+------------------+---------+
+|  1 | William    | Shatner   |        1 |               50 |       1 |
+|  2 | Rihanna    | Dontknow  |        2 |                5 |       0 |
+|  3 | Sophicles  | Belatus   |        3 |               10 |       1 |
+|  4 | Apollo     | Apples    |        4 |               20 |       0 |
+|  5 | Zeus       | Zooming   |        5 |                8 |       1 |
+|  6 | Athena     | Katandao  |        6 |               11 |       0 |
+|  7 | Hades      | Black     |        7 |                3 |       1 |
++----+------------+-----------+----------+------------------+---------+
+7 rows in set (0.00 sec)
+
+mysql> explain major;
++-------------+-------------+------+-----+---------+----------------+
+| Field       | Type        | Null | Key | Default | Extra          |
++-------------+-------------+------+-----+---------+----------------+
+| id          | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(30) | YES  |     |         |                |
+| minimum_sat | int(11)     | YES  |     | 0       |                |
++-------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from major;
++----+------------------+-------------+
+| id | name             | minimum_sat |
++----+------------------+-------------+
+|  1 | General Business |         800 |
+|  2 | Accounting       |        1000 |
+|  3 | Finance          |        1100 |
+|  4 | Math             |        1300 |
+|  5 | Engineering      |        1350 |
+|  6 | Education        |         900 |
+|  7 | General Studies  |         500 |
++----+------------------+-------------+
+7 rows in set (0.00 sec)
+
+mysql> explain student;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| id         | int(11)      | NO   | PRI | NULL    |       |
+| first_name | varchar(30)  | NO   |     | NULL    |       |
+| last_name  | varchar(30)  | NO   |     | NULL    |       |
+| start_date | date         | NO   |     | NULL    |       |
+| major_id   | int(11)      | YES  | MUL | NULL    |       |
+| gpa        | decimal(5,1) | YES  |     | NULL    |       |
+| sat        | int(11)      | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> explain majorclassrelationship;
++----------+---------+------+-----+---------+----------------+
+| Field    | Type    | Null | Key | Default | Extra          |
++----------+---------+------+-----+---------+----------------+
+| id       | int(11) | NO   | PRI | NULL    | auto_increment |
+| major_id | int(11) | NO   | MUL | NULL    |                |
+| class_id | int(11) | NO   | MUL | NULL    |                |
++----------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> explain studentclassrelationship;
++------------+---------+------+-----+---------+----------------+
+| Field      | Type    | Null | Key | Default | Extra          |
++------------+---------+------+-----+---------+----------------+
+| id         | int(11) | NO   | PRI | NULL    | auto_increment |
+| student_id | int(11) | NO   | MUL | NULL    |                |
+| class_id   | int(11) | NO   | MUL | NULL    |                |
++------------+---------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
