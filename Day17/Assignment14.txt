@@ -1,3 +1,74 @@
+mysql> explain student;
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int(11)      | NO   | PRI | NULL    | auto_increment |
+| first_name | varchar(30)  | NO   |     | NULL    |                |
+| last_name  | varchar(30)  | NO   |     | NULL    |                |
+| major_id   | int(11)      | YES  | MUL | NULL    |                |
+| gpa        | decimal(5,1) | YES  |     | NULL    |                |
+| sat        | int(11)      | YES  |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+6 rows in set (0.02 sec)
+
+mysql> select * from student;
++----+------------+-----------+----------+------+------+
+| id | first_name | last_name | major_id | gpa  | sat  |
++----+------------+-----------+----------+------+------+
+|  1 | Eric       | Ephram    |        1 |  4.0 |  500 |
+|  2 | Greg       | Gould     |        2 |  3.5 |  600 |
+|  3 | Adam       | Ant       |        3 |  3.0 |  800 |
+|  4 | Howard     | Hess      |        4 |  2.5 |  900 |
+|  5 | Charles    | Caldwell  |        5 |  3.3 | 1000 |
+|  6 | James      | Joyce     |        6 |  3.9 | 1100 |
+|  7 | Doug       | Dumas     |        7 |  2.9 | 1200 |
+|  8 | Kevin      | Kraft     |        1 |  1.5 | 1350 |
+|  9 | Frank      | Fountain  |        2 |  2.8 | 1400 |
+| 10 | Brian      | Biggs     |        3 |  4.0 | 1400 |
+| 11 | Brian      | Bigwigs   |        3 |  4.0 | 1100 |
++----+------------+-----------+----------+------+------+
+11 rows in set (0.00 sec)
+
+
+***************************************************************************************
+mysql> explain assignment;
++----------------+---------+------+-----+---------+----------------+
+| Field          | Type    | Null | Key | Default | Extra          |
++----------------+---------+------+-----+---------+----------------+
+| id             | int(11) | NO   | PRI | NULL    | auto_increment |
+| student_id     | int(11) | NO   | MUL | NULL    |                |
+| assignment_nbr | int(11) | NO   | MUL | NULL    |                |
+| grade_id       | int(11) | YES  | MUL | NULL    |                |
++----------------+---------+------+-----+---------+----------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from assignment;
++----+------------+----------------+----------+
+| id | student_id | assignment_nbr | grade_id |
++----+------------+----------------+----------+
+|  1 |          1 |              1 |        1 |
+|  2 |          1 |             11 |        2 |
+|  3 |          2 |              2 |        1 |
+|  4 |          2 |             12 |        3 |
+|  5 |          3 |              3 |        4 |
+|  6 |          3 |             13 |        1 |
+|  7 |          4 |              4 |        2 |
+|  8 |          4 |             14 |        1 |
+|  9 |          5 |              5 |        1 |
+| 10 |          5 |             15 |        5 |
+| 11 |          6 |              6 |        2 |
+| 12 |          6 |             16 |        3 |
+| 13 |          7 |              7 |        1 |
+| 14 |          7 |             17 |        1 |
+| 15 |          8 |              8 |        4 |
+| 16 |          8 |             18 |        4 |
+| 17 |          9 |              9 |        2 |
+| 18 |          9 |             19 |        2 |
+| 19 |         10 |             10 |        1 |
+| 20 |         10 |             20 |        1 |
++----+------------+----------------+----------+
+20 rows in set (0.00 sec)
+***************************************************************************************
 mysql> explain class;
 +---------------+-------------+------+-----+---------+----------------+
 | Field         | Type        | Null | Key | Default | Extra          |
@@ -50,20 +121,7 @@ mysql> select * from class;
 | 36 | Education 353        |             6 |
 +----+----------------------+---------------+
 36 rows in set (0.00 sec)
-
-mysql> explain assignment;
-+----------------+---------+------+-----+---------+-------+
-| Field          | Type    | Null | Key | Default | Extra |
-+----------------+---------+------+-----+---------+-------+
-| id             | int(11) | NO   | PRI | NULL    |       |
-| student_id     | int(11) | NO   | MUL | NULL    |       |
-| assignment_nbr | int(11) | NO   | MUL | NULL    |       |
-| grade_id       | int(11) | YES  | MUL | NULL    |       |
-+----------------+---------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
-
-mysql> select * from assignment;
-Empty set (0.00 sec)
+***************************************************************************************
 
 mysql> explain grade;
 +-------------+----------+------+-----+---------+-------+
@@ -73,6 +131,20 @@ mysql> explain grade;
 | description | char(30) | NO   |     |         |       |
 +-------------+----------+------+-----+---------+-------+
 2 rows in set (0.00 sec)
+
+mysql> select * from grade;
++----+-----------------------------+
+| id | description                 |
++----+-----------------------------+
+|  1 | Exceeds expectations        |
+|  2 | Complete and satisfactory   |
+|  3 | Complete and unsatisfactory |
+|  4 | Incomplete                  |
+|  5 | Not graded                  |
++----+-----------------------------+
+5 rows in set (0.00 sec)
+
+***************************************************************************************
 
 mysql> explain instructor;
 +------------------+-------------+------+-----+---------+----------------+
@@ -98,8 +170,11 @@ mysql> select * from instructor;
 |  5 | Zeus       | Zooming   |        5 |                8 |       1 |
 |  6 | Athena     | Katandao  |        6 |               11 |       0 |
 |  7 | Hades      | Black     |        7 |                3 |       1 |
+|  8 | Hera       | Unleashed |        1 |                1 |       0 |
 +----+------------+-----------+----------+------------------+---------+
-7 rows in set (0.00 sec)
+8 rows in set (0.00 sec)
+
+***************************************************************************************
 
 mysql> explain major;
 +-------------+-------------+------+-----+---------+----------------+
@@ -125,19 +200,7 @@ mysql> select * from major;
 +----+------------------+-------------+
 7 rows in set (0.00 sec)
 
-mysql> explain student;
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| id         | int(11)      | NO   | PRI | NULL    |       |
-| first_name | varchar(30)  | NO   |     | NULL    |       |
-| last_name  | varchar(30)  | NO   |     | NULL    |       |
-| start_date | date         | NO   |     | NULL    |       |
-| major_id   | int(11)      | YES  | MUL | NULL    |       |
-| gpa        | decimal(5,1) | YES  |     | NULL    |       |
-| sat        | int(11)      | YES  |     | NULL    |       |
-+------------+--------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
+***************************************************************************************
 
 mysql> explain majorclassrelationship;
 +----------+---------+------+-----+---------+----------------+
@@ -149,6 +212,89 @@ mysql> explain majorclassrelationship;
 +----------+---------+------+-----+---------+----------------+
 3 rows in set (0.00 sec)
 
+mysql> select * from majorclassrelationship;
++----+----------+----------+
+| id | major_id | class_id |
++----+----------+----------+
+|  1 |        1 |        1 |
+|  2 |        1 |        2 |
+|  3 |        1 |        3 |
+|  4 |        1 |       10 |
+|  5 |        1 |       11 |
+|  6 |        1 |       12 |
+|  7 |        1 |       13 |
+|  8 |        1 |       14 |
+|  9 |        1 |       18 |
+| 10 |        1 |       21 |
+| 11 |        2 |        1 |
+| 12 |        2 |        2 |
+| 13 |        2 |        3 |
+| 14 |        2 |       10 |
+| 15 |        2 |       11 |
+| 16 |        2 |       12 |
+| 17 |        2 |       13 |
+| 18 |        2 |       14 |
+| 19 |        2 |       15 |
+| 20 |        2 |       21 |
+| 21 |        2 |       22 |
+| 22 |        3 |        1 |
+| 23 |        3 |        2 |
+| 24 |        3 |        3 |
+| 25 |        3 |       10 |
+| 26 |        3 |       11 |
+| 27 |        3 |       13 |
+| 28 |        3 |       18 |
+| 29 |        3 |       21 |
+| 30 |        3 |       22 |
+| 31 |        3 |       23 |
+| 32 |        4 |        1 |
+| 33 |        4 |        2 |
+| 34 |        4 |        3 |
+| 35 |        4 |       10 |
+| 36 |        4 |       11 |
+| 37 |        4 |       12 |
+| 38 |        4 |       13 |
+| 39 |        4 |       14 |
+| 40 |        4 |       15 |
+| 41 |        4 |       16 |
+| 42 |        4 |       17 |
+| 43 |        5 |        1 |
+| 44 |        5 |        2 |
+| 45 |        5 |        3 |
+| 46 |        5 |       10 |
+| 47 |        5 |       11 |
+| 48 |        5 |       12 |
+| 49 |        5 |       13 |
+| 50 |        5 |       18 |
+| 51 |        6 |        1 |
+| 52 |        6 |        2 |
+| 53 |        6 |       32 |
+| 54 |        6 |       10 |
+| 55 |        6 |       11 |
+| 56 |        6 |       12 |
+| 57 |        6 |       33 |
+| 58 |        6 |       18 |
+| 59 |        6 |       20 |
+| 60 |        6 |       31 |
+| 61 |        6 |       34 |
+| 62 |        6 |       35 |
+| 63 |        6 |       36 |
+| 64 |        7 |        1 |
+| 65 |        7 |        2 |
+| 66 |        7 |        3 |
+| 67 |        7 |       10 |
+| 68 |        7 |       11 |
+| 69 |        7 |       12 |
+| 70 |        7 |       18 |
+| 71 |        7 |       19 |
+| 72 |        7 |       20 |
+| 73 |        7 |       27 |
+| 74 |        7 |       31 |
++----+----------+----------+
+74 rows in set (0.01 sec)
+
+***************************************************************************************
+
 mysql> explain studentclassrelationship;
 +------------+---------+------+-----+---------+----------------+
 | Field      | Type    | Null | Key | Default | Extra          |
@@ -158,3 +304,238 @@ mysql> explain studentclassrelationship;
 | class_id   | int(11) | NO   | MUL | NULL    |                |
 +------------+---------+------+-----+---------+----------------+
 3 rows in set (0.00 sec)
+
+mysql> select * from studentclassrelationship;
++----+------------+----------+
+| id | student_id | class_id |
++----+------------+----------+
+|  1 |          1 |        1 |
+|  2 |          2 |        2 |
+|  3 |          3 |        3 |
+|  4 |          4 |        4 |
+|  5 |          5 |        5 |
+|  6 |          6 |        6 |
+|  7 |          7 |        7 |
+|  8 |          8 |        8 |
+|  9 |          9 |        9 |
+| 10 |         10 |       10 |
+| 11 |          1 |       11 |
+| 12 |          2 |       12 |
+| 13 |          3 |       13 |
+| 14 |          4 |       14 |
+| 15 |          5 |       15 |
+| 16 |          6 |       16 |
+| 17 |          7 |       17 |
+| 18 |          8 |       18 |
+| 19 |          9 |       19 |
+| 20 |         10 |       20 |
++----+------------+----------+
+20 rows in set (0.00 sec)
+
+
+***************************************************************************************
+-- What majors required English101?
+SELECT major.name, class.name 
+    FROM major 
+    JOIN majorclassrelationship 
+        ON major.id = majorclassrelationship.major_id 
+    JOIN class 
+        ON class.id = majorclassrelationship.class_id 
+WHERE class.name = 'English 101';
+
+
++------------------+-------------+
+| name             | name        |
++------------------+-------------+
+| General Business | English 101 |
+| Accounting       | English 101 |
+| Finance          | English 101 |
+| Math             | English 101 |
+| Engineering      | English 101 |
+| Education        | English 101 |
+| General Studies  | English 101 |
++------------------+-------------+
+7 rows in set (0.02 sec)
+
+***************************************************************************************
+-- What classes are required for the General Business major?
+SELECT major.name, class.name 
+    FROM major 
+    JOIN majorclassrelationship 
+        ON major.id = majorclassrelationship.major_id 
+    JOIN class 
+        ON class.id = majorclassrelationship.class_id 
+WHERE major.name like 'General Business%';
+
++------------------+----------------------+
+| name             | name                 |
++------------------+----------------------+
+| General Business | English 101          |
+| General Business | English 102          |
+| General Business | English 103          |
+| General Business | Math 201             |
+| General Business | Math 202             |
+| General Business | Math 203             |
+| General Business | Math 204             |
+| General Business | Math 301             |
+| General Business | History 101          |
+| General Business | Computer Science 311 |
++------------------+----------------------+
+10 rows in set (0.01 sec)
+
+
+***************************************************************************************
+-- What classes are the students taking that are part of their majors?
+select student.first_name, student.last_name, mc.major_id, major.name as 'students registered major',class.name as 'enrolled class within students major', sc.class_id 
+	from student
+	join majorclassrelationship mc
+		on mc.major_id = student.major_id
+	join studentclassrelationship sc
+		on sc.class_id = mc.class_id
+	join `class`
+		on class.id = sc.class_id
+	join major
+		on major.id = mc.major_id
+where student.id = sc.student_id;
+
+
++------------+-----------+----------+---------------------------+--------------------------------------+----------+
+| first_name | last_name | major_id | students registered major | enrolled class within students major | class_id |
++------------+-----------+----------+---------------------------+--------------------------------------+----------+
+| Eric       | Ephram    |        1 | General Business          | English 101                          |        1 |
+| Eric       | Ephram    |        1 | General Business          | Math 202                             |       11 |
+| Kevin      | Kraft     |        1 | General Business          | History 101                          |       18 |
+| Greg       | Gould     |        2 | Accounting                | English 102                          |        2 |
+| Greg       | Gould     |        2 | Accounting                | Math 203                             |       12 |
+| Adam       | Ant       |        3 | Finance                   | English 103                          |        3 |
+| Adam       | Ant       |        3 | Finance                   | Math 204                             |       13 |
+| Brian      | Biggs     |        3 | Finance                   | Math 201                             |       10 |
+| Howard     | Hess      |        4 | Math                      | Math 301                             |       14 |
++------------+-----------+----------+---------------------------+--------------------------------------+----------+
+9 rows in set (0.00 sec)
+
+
+***************************************************************************************
+Triggers were added after the student table was populated, which is why they may not match the constraints.
+I tested the triggers after adding them and they work.
+
+***************************************************************************************
+-- trigger to throw error if instructor.years_experience is less than 1
+DROP TRIGGER IF EXISTS trg_years_exp_ins;
+DELIMITER $$
+create trigger trg_years_exp_ins 
+before insert on instructor
+for each row
+begin
+    declare msg varchar(128);
+    if new.years_experience < 1 
+	then
+        set msg = concat('InsertYearsExpError: Trying to insert a negative or zero value in instructor: ', cast(new.years_experience as char));
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+
+-- Insert trigger to throw error if the student.major_id being assigned does not meet the minimum requirements for the SAT score
+DROP TRIGGER IF EXISTS trg_valid_major_ins;
+DELIMITER $$
+create trigger trg_valid_major_ins 
+before insert on student
+for each row
+begin
+    declare msg varchar(128);
+	declare sat_check integer;
+	select major.minimum_sat into sat_check from major where new.major_id = major.id;
+    if (new.sat < sat_check) or (new.sat > 1600)
+	then
+        set msg = concat('InsertMajError: Trying to insert an invalid value in major_id field.');
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+-- Update trigger to throw error if the student.major_id being assigned does not meet the minimum requirements for the SAT score
+DROP TRIGGER IF EXISTS trg_valid_major_upd;
+DELIMITER $$
+create trigger trg_valid_major_upd 
+before update on student
+for each row
+begin
+    declare msg varchar(128);
+	declare sat_check integer;
+	select major.minimum_sat into sat_check from major where new.major_id = major.id;
+    if (new.sat < sat_check) or (new.sat > 1600)
+	then
+        set msg = concat('InsertMajError: Trying to update an invalid value in major_id field.');
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+-- Insert trigger to throw error if the student sat score does not meet the minimum requirements
+DROP TRIGGER IF EXISTS trg_valid_sat_ins;
+DELIMITER $$
+create trigger trg_valid_sat_ins 
+before insert on student
+for each row
+begin
+    declare msg varchar(128);
+    if (new.sat < 400) or (new.sat > 1600)
+	then
+        set msg = concat('InsertSatError: Trying to insert an invalid value in Student Sat field.');
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+-- Update trigger to throw error if the student sat score does not meet the minimum requirements
+DROP TRIGGER IF EXISTS trg_valid_sat_upd;
+DELIMITER $$
+create trigger trg_valid_sat_upd 
+before update on student
+for each row
+begin
+    declare msg varchar(128);
+    if (new.sat < 400) or (new.sat > 1600)
+	then
+        set msg = concat('UpdateSatError: Trying to update an invalid value in Student Sat field.');
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+-- Update trigger to throw error if the tenured field is not 0 or 1
+DROP TRIGGER IF EXISTS trg_valid_tenure_upd;
+DELIMITER $$
+create trigger trg_valid_tenure_upd 
+before update on instructor
+for each row
+begin
+    declare msg varchar(128);
+    if (new.tenured < 0) or (new.tenured > 1)
+	then
+        set msg = concat('UpdateTenuredError: Trying to update an invalid value into instructor table, tenured column.');
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+-- Insert trigger to throw error if the tenured field is not 0 or 1
+DROP TRIGGER IF EXISTS trg_valid_tenure_ins;
+DELIMITER $$
+create trigger trg_valid_tenure_ins 
+before insert on instructor
+for each row
+begin
+    declare msg varchar(128);
+    if (new.tenured < 0) or (new.tenured > 1)
+	then
+        set msg = concat('InsertTenuredError: Trying to insert an invalid value into instructor table, tenured column.');
+        signal sqlstate '45000' set message_text = msg;
+    end if;
+end $$
+DELIMITER ;
+
+***************************************************************************************
+
