@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+body {
+    background-color: linen;
+	font: blue;
+}
+
+p {
+    color: maroon;
+    margin-left: 40px;
+}
+span {
+	color:red;font-weight:bold;
+}
+table	{
+	width:50%;
+	margin: 0 auto;
+	border: 1px solid black;
+}
+th.column_head {
+	font-weight: bold;
+	text-align: left;
+	border: 1px solid black;
+}
+#column_name {
+	font-weight: bold;
+	width: 20%;
+}
+#column_dept {
+	width: 20%;
+}
+#column_sup {
+	width: 20%;
+	color: red;
+}
+#column_date {
+	font-style:italic;
+	width: 20%;
+}
+#column_pic {
+	width: 20%;
+}
+div {
+	width: 49%;
+	display: inline-block;
+	text-align: left;
+	color: navy;
+}
+
