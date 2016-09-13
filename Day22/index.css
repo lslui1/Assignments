@@ -1,0 +1,48 @@
+@CHARSET "ISO-8859-1";
+html { 
+  background: url(SSA.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+li {
+	text-align:left;
+}
+table	{
+	width:50%;
+	margin: 0 auto;
+	border: 1px solid black;
+}
+#column_name {
+	font-weight: bold;
+	width: 20%;
+}
+#column_dept {
+	width: 20%;
+}
+#column_sup {
+	width: 20%;
+	color: red;
+}
+#column_date {
+	font-style:italic;
+	width: 20%;
+}
+#column_pic {
+	width: 20%;
+}
+div {
+	width: 49%;
+	display: inline-block;
+	text-align: left;
+	color: navy;
+	border-style: solid;
+	border-color: red;
+}
+footer {
+	background-color:black;
+	text-align:center;
+}
+
