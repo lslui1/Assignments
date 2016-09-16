@@ -22,7 +22,7 @@ public class MySQLAccess {
   private String dbCatalog = null;
   private String dbOptions = null;
 
-
+// Get database connection properties
 public void getDBProperties() throws Exception {
     try {
     	Properties dbProp = new Properties();
@@ -39,21 +39,21 @@ public void getDBProperties() throws Exception {
     }
 }
 
+// Establish JDBC connection to database
 public void getConnection() throws Exception {
 	try {
 		getDBProperties();
     	String url = dburl + host + dbCatalog + dbOptions;
     	Class.forName ("com.mysql.jdbc.Driver").newInstance ();
     	connect = DriverManager.getConnection (url, user, passwd);
-
-//    	connect.setCatalog(dbCatalog);
-		
 	}	catch(Exception e) {
 		throw e;
 	}
 	
 }
-public void readStudentDataBase() throws Exception {
+
+// SQL to read entire student table and call print statement for table
+public void readStudentTable() throws Exception {
     try {   	
     	getConnection();
     	
@@ -67,17 +67,19 @@ public void readStudentDataBase() throws Exception {
     }
   }
 
-
+// Pad names for table formatting
 public String padName(String aName) {
 	String padded = String.format("%1$-20s", aName);
 	return padded;
 }
 
+// Pad numbers for table formatting
 public String padNumber(String aNumber) {
 	String padded = String.format("%1$-7s", aNumber);
 	return padded;
 }
 
+// Print Student table results
 public void printStudentResultSet() throws Exception {
 	
 	boolean emptyRS = true;
@@ -108,104 +110,117 @@ public void printStudentResultSet() throws Exception {
 		System.out.println("Query resulted in an empty result set");
 	}
 }
+
+// SQL to check if major meets minimum requirements based on student SAT scores
+public boolean checkUpdateMajor(String fname, String lname, String aMajor) throws Exception {
+	int studentGPA = 0;
+	int requiredGPA = 0;
+	 try {	
+	    	getConnection();
+	    			
+	    	String updateSQL = "select student.sat, major.req_sat from student join major on major.description = ? ";
+	    	String updateSQL2 = "where student.first_name = ? and student.last_name = ?";
+	    	preparedStatement = connect.prepareStatement(updateSQL + updateSQL2);
+	    	preparedStatement.setString(1, aMajor);
+	    	preparedStatement.setString(2, fname);
+	    	preparedStatement.setString(3, lname);
+	    	resultSet = preparedStatement.executeQuery();
+	    	
+	    	try {
+				while (resultSet.next()) {
+					studentGPA = resultSet.getInt("sat");
+					requiredGPA = resultSet.getInt("req_sat");
+				}
+			} catch (Exception e) {
+				throw e;
+			}
+	    } catch (Exception e) {
+	    	throw e;
+	    } finally {
+	    	close();
+	    }
+	 
+	 return (studentGPA >= requiredGPA) ? true : false;
+}
+
+// SQL to Update major in student table
+public void updateMajor(String fname, String lname, String aMajor) throws Exception {
+	 try {	
+	    	getConnection();
+	    	
+	    	String updateSQL = "update student join major on major.description = ? set student.major_id = major.id ";
+	    	String updateSQL2 = "where student.first_name = ? and student.last_name = ?";
+	    	preparedStatement = connect.prepareStatement(updateSQL + updateSQL2);
+	    	preparedStatement.setString(1, aMajor);
+	    	preparedStatement.setString(2, fname);
+	    	preparedStatement.setString(3, lname);
+	    	preparedStatement.executeUpdate();
+	    } catch (Exception e) {
+	      throw e;
+	    } finally {
+	      close();
+	    }
+}
+
+// Call methods to verify and update student major
+public void addStudentMajor(String fname, String lname, String aMajor) {
+	boolean isValid = false;
 	
-public void updateDBMajor() throws Exception {
-    try {	
-    	getConnection();
+	try {
+		isValid = checkUpdateMajor(fname, lname, aMajor);
+		if (isValid) {updateMajor(fname, lname, aMajor);}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	
+	if (!isValid) {
+		System.out.printf("\n%s %s: Invalid selection for major. SAT requirements do not meet the standard.\n\n", fname, lname);
+	}
+}
+
+// Test method called from main program
+public void requestAddStudentMajor() {
+		try {
+			addStudentMajor("Adam","Zapel","Finance");
+			addStudentMajor("Graham","Krakir","General Studies");
+			addStudentMajor("Ella","Vader","Accounting");
+			addStudentMajor("Stanley","Kupp","Engineering");
+			addStudentMajor("Lou","Zar","Education");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+}
+
+// SQL to insert student
+public void insertStudent(String fname, String lname, int aSat, double aGpa) throws Exception {
+	 try {
+	    getConnection();
+	    
+	    preparedStatement = connect.prepareStatement("insert into student values (default, ?, ?, ?, ?, default)");
     	
-    	String updateSQL = "update student join major on major.description = ? set student.major_id = major.id ";
-    	String updateSQL2 = "where student.first_name = ? and student.last_name = ?";
-    	preparedStatement = connect.prepareStatement(updateSQL + updateSQL2);
-    	preparedStatement.setString(1, "Finance");
-    	preparedStatement.setString(2, "Adam");
-    	preparedStatement.setString(3, "Zapel");
+    	preparedStatement.setString(1, fname);
+    	preparedStatement.setString(2, lname);
+    	preparedStatement.setInt(3, aSat);
+    	preparedStatement.setDouble(4, aGpa);
     	preparedStatement.executeUpdate();
-    	
-    	preparedStatement.setString(1, "General Studies");
-    	preparedStatement.setString(2, "Graham");
-    	preparedStatement.setString(3, "Krakir");
-    	preparedStatement.executeUpdate();
+	 } catch (Exception e) {
+	      throw e;
+	 } finally {
+	      close();
+	 }
+}
 
-    	preparedStatement.setString(1, "Accounting");
-    	preparedStatement.setString(2, "Ella");
-    	preparedStatement.setString(3, "Vader");
-    	preparedStatement.executeUpdate();
-
-    	preparedStatement.setString(1, "Engineering");
-    	preparedStatement.setString(2, "Stanley");
-    	preparedStatement.setString(3, "Kupp");
-    	preparedStatement.executeUpdate();
-
-    	preparedStatement.setString(1, "Education");
-    	preparedStatement.setString(2, "Lou");
-    	preparedStatement.setString(3, "Zar");
-    	preparedStatement.executeUpdate();
-    } catch (Exception e) {
-      throw e;
-    } finally {
-      close();
-    }
+// Test method to insert students
+public void addStudentsToDB() throws Exception {
+    	insertStudent("Adam", "Zapel", 1200, 3.0);
+    	insertStudent("Graham", "Krakir", 500, 2.5);
+    	insertStudent("Ella", "Vader", 800, 3.0);
+    	insertStudent("Stanley", "Kupp", 1350, 3.3);
+    	insertStudent("Lou", "Zar", 950, 3.0);
   }
 
-public void deleteFromDataBase() throws Exception {
-    try {
-    	getConnection();
-    	
-    	String deleteSQL = "delete from student where first_name = ? and last_name = ?";
-    	preparedStatement = connect.prepareStatement(deleteSQL);
-    	preparedStatement.setString(1, "Adam");
-    	preparedStatement.setString(2, "Zapel");
-    	preparedStatement.executeUpdate();  
-    } catch (Exception e) {
-      throw e;
-    } finally {
-      close();
-    }
-  }
-
-public void insertToDBStudent() throws Exception {
-    try {
-    	getConnection();
-
-    	preparedStatement = connect.prepareStatement("insert into student values (default, ?, ?, ?, ?, default)");
-    	
-    	preparedStatement.setString(1, "Adam");
-    	preparedStatement.setString(2, "Zapel");
-    	preparedStatement.setInt(3, 1200);
-    	preparedStatement.setDouble(4, 3.0);
-    	preparedStatement.executeUpdate();
-    	
-    	preparedStatement.setString(1, "Graham");
-    	preparedStatement.setString(2, "Krakir");
-    	preparedStatement.setInt(3, 500);
-    	preparedStatement.setDouble(4, 2.5);
-    	preparedStatement.executeUpdate();
-
-    	preparedStatement.setString(1, "Ella");
-    	preparedStatement.setString(2, "Vader");
-    	preparedStatement.setInt(3, 800);
-    	preparedStatement.setDouble(4, 3.0);
-    	preparedStatement.executeUpdate();
-
-    	preparedStatement.setString(1, "Stanley");
-    	preparedStatement.setString(2, "Kupp");
-    	preparedStatement.setInt(3, 1350);
-    	preparedStatement.setDouble(4, 3.3);
-    	preparedStatement.executeUpdate();
-
-    	preparedStatement.setString(1, "Lou");
-    	preparedStatement.setString(2, "Zar");
-    	preparedStatement.setInt(3, 950);
-    	preparedStatement.setDouble(4, 3.0);
-    	preparedStatement.executeUpdate();
-    	
-    } catch (Exception e) {
-      throw e;
-    } finally {
-      close();
-    }
-  }
-
+// Close everything
   private void close() {
     try {
       if (resultSet != null) {
@@ -225,7 +240,8 @@ public void insertToDBStudent() throws Exception {
     }
   }
 
-public void InsertToDBClasses() throws Exception{
+// SQL to Add classes for a student
+public void addClassToStudent(String fname, String lname, int classId) throws Exception {
 	try {
 		getConnection();
 
@@ -233,33 +249,52 @@ public void InsertToDBClasses() throws Exception{
 		String sql2 = "select id, ? from student where first_name = ? and last_name = ?";
 		preparedStatement = connect.prepareStatement(sql1 + sql2);
 		
-    	preparedStatement.setInt(1, 10102);
-    	preparedStatement.setString(2, "Adam");
-    	preparedStatement.setString(3, "Zapel");
+    	preparedStatement.setInt(1, classId);
+    	preparedStatement.setString(2, fname);
+    	preparedStatement.setString(3, lname);
     	preparedStatement.executeUpdate();
-    	preparedStatement.setInt(1, 10103);
-    	preparedStatement.setString(2, "Adam");
-    	preparedStatement.setString(3, "Zapel");
-    	preparedStatement.executeUpdate();
-    	preparedStatement.setInt(1, 20401);
-    	preparedStatement.setString(2, "Adam");
-    	preparedStatement.setString(3, "Zapel");
-    	preparedStatement.executeUpdate();
-    	preparedStatement.setInt(1, 20201);
-    	preparedStatement.setString(2, "Adam");
-    	preparedStatement.setString(3, "Zapel");
-    	preparedStatement.executeUpdate();
-    	
 	}	catch (Exception e) {
 		throw e;
-	 } finally {
+	} finally {
 	      close();
-	 }
+	}
 }
 
+// Test method for adding classes for a student
+public void InsertToDBClasses() {
+		try {
+			addClassToStudent("Adam", "Zapel", 10102);
+			addClassToStudent("Adam", "Zapel", 10103);
+			addClassToStudent("Adam", "Zapel", 20401);
+			addClassToStudent("Adam", "Zapel", 20201);
+	    	
+			addClassToStudent("Graham", "Krakir", 10101);
+			addClassToStudent("Graham", "Krakir", 30101);
+			addClassToStudent("Graham", "Krakir", 20201);
+			addClassToStudent("Graham", "Krakir", 20404);
+	    	
+			addClassToStudent("Ella", "Vader", 20201);
+			addClassToStudent("Ella", "Vader", 30101);
+			addClassToStudent("Ella", "Vader", 20402);
+			addClassToStudent("Ella", "Vader", 20202);
+	    	
+			addClassToStudent("Stanley", "Kupp", 10103);
+			addClassToStudent("Stanley", "Kupp", 10101);
+			addClassToStudent("Stanley", "Kupp", 20202);
+			addClassToStudent("Stanley", "Kupp", 20403);
+	    	
+			addClassToStudent("Lou", "Zar", 10102);
+			addClassToStudent("Lou", "Zar", 10103);
+			addClassToStudent("Lou", "Zar", 20201);
+			addClassToStudent("Lou", "Zar", 20203);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+}
+
+// SQL to format and print a student report
 public void printStudentReport(String fname, String lname) throws Exception{
-	boolean emptyRS = true;
-	
+	int listNum = 0;
 	try {
 		getConnection();
 
@@ -268,18 +303,14 @@ public void printStudentReport(String fname, String lname) throws Exception{
     	preparedStatement.setString(2, lname);
     	
     	resultSet = preparedStatement.executeQuery();	
-    	int aId = 0;
     	int aSat = 0;
     	int aMajor = 0;
     	String fullName = null;
-    	int aClass_id = 0;
-		System.out.println("Education System - Enrollment Process");
+		System.out.printf("\nEducation System - Enrollment Process\n");
 		System.out.printf("=====================================\n\n");
     	
 		try {
 			while (resultSet.next()) {
-				emptyRS = false;
-				aId = resultSet.getInt("id");
 				String fName = resultSet.getString("first_name");
 				String lName = resultSet.getString("last_name");
 				aSat = resultSet.getInt("sat");
@@ -295,39 +326,74 @@ public void printStudentReport(String fname, String lname) throws Exception{
 				try {
 					while (resultSet.next()) {
 						String theMajor = resultSet.getString("description");
-
 						System.out.printf("Assigned %s to the %s Major which requires a required SAT score of %d.\n", fullName, theMajor, aSat);
-						System.out.printf("Enrolled %s in the following four classes:\n", fullName);
+						System.out.printf("Enrolled %s in the following classes:\n", fullName);
 					}
 				} catch (Exception e) {
 					throw e;
 				}
+				// Display statement for class that are required for major
+				String sql1 = "select c.subject, c.section, c.id " +
+						"from student s " +
+						"join major_class_relationship mc " +
+						"on mc.major_id = s.major_id " +
+						"join student_class_relationship sc " +
+						"on sc.class_id = mc.class_id and s.id = sc.student_id " +
+						"join class c " +
+						"on c.id = sc.class_id " +
+						"join major m " +
+						"on m.id = mc.major_id " +
+						"where first_name = ? and last_name = ?";
 				
-//				1. [class name] required for major
-//				3. [class name] elective (not required for major)
-				
-				preparedStatement = connect.prepareStatement("select class_id from student_class_relationship where student_class_relationship.student_id = ?");
-				preparedStatement.setInt(1, aId);
-		    	resultSet = preparedStatement.executeQuery();
-		    	int aIndex = 0;
-		    	try {
+				preparedStatement = connect.prepareStatement(sql1);
+				preparedStatement.setString(1, fname);
+				preparedStatement.setString(2, lname);
+    	
+				resultSet = preparedStatement.executeQuery();	
+				try {
 					while (resultSet.next()) {
-						aClass_id = resultSet.getInt("class_id");
-						aIndex++;
-						System.out.printf(" %d. %d is an enrolled class.\n", aIndex, aClass_id);
+						listNum++;
+						int aClassId = resultSet.getInt("id");
+						String aSubject = resultSet.getString("subject");
+						String aSection = resultSet.getString("section");
+						System.out.printf("%d. %s %s %d required for major.\n", listNum, aSubject, aSection, aClassId);
 					}
 				} catch (Exception e) {
 					throw e;
 				}
+
+                // Display statements for classes that are not in their major	
+				String sql2 = "select c1.subject, c1.section, c1.id from student s1 join student_class_relationship sc1 "
+								+ "on s1.id = sc1.student_id join class c1 on c1.id = sc1.class_id "
+								+ "where first_name = ? and last_name = ? and c1.id not in ("
+								+ "select c.id from student s join major_class_relationship mc "
+								+ "on mc.major_id = s.major_id join student_class_relationship sc "
+								+ "on sc.class_id = mc.class_id and s.id = sc.student_id join class c "
+								+ "on c.id = sc.class_id join major m on m.id = mc.major_id "
+								+ "where first_name = ? and last_name = ?)";
+			    preparedStatement = connect.prepareStatement(sql2);
+			    preparedStatement.setString(1, fname);
+			    preparedStatement.setString(2, lname);
+			    preparedStatement.setString(3, fname);
+			    preparedStatement.setString(4, lname);
+			    	
+			    resultSet = preparedStatement.executeQuery();	
+			    try {
+			    	while (resultSet.next()) {
+			    		listNum++;
+			    		int aClassId = resultSet.getInt("id");
+			    		String aSubject = resultSet.getString("subject");
+			    		String aSection = resultSet.getString("section");
+
+						System.out.printf("%d. %s %s %d elective (not required for major).\n", listNum, aSubject, aSection, aClassId);
+					}
+				} catch (Exception e) {
+					throw e;
+				}								
 			}
 		} catch (Exception e) {
 			throw e;
 		}
-		if (emptyRS) {
-			System.out.println("Query resulted in an empty result set");
-		}
-		
-		
 	}	catch (Exception e) {
 		throw e;
 	} finally {
@@ -335,11 +401,14 @@ public void printStudentReport(String fname, String lname) throws Exception{
 	}
 }
 
+// Test method to call for reports on individual students
 public void generateReport() throws Exception{
 	try {
 		printStudentReport("Adam", "Zapel");
-		
-    	
+		printStudentReport("Graham", "Krakir");
+		printStudentReport("Ella", "Vader");
+		printStudentReport("Stanley", "Kupp");
+		printStudentReport("Lou", "Zar");
 	}	catch (Exception e) {
 		throw e;
 	 } finally {
