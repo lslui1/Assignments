@@ -333,7 +333,7 @@ public void printStudentReport(String fname, String lname) throws Exception{
 					throw e;
 				}
 				// Display statement for class that are required for major
-				String sql1 = "select c.subject, c.section, c.id " +
+				String sql1 = "select distinct c.subject, c.section, c.id " +
 						"from student s " +
 						"join major_class_relationship mc " +
 						"on mc.major_id = s.major_id " +
@@ -363,7 +363,7 @@ public void printStudentReport(String fname, String lname) throws Exception{
 				}
 
                 // Display statements for classes that are not in their major	
-				String sql2 = "select c1.subject, c1.section, c1.id from student s1 join student_class_relationship sc1 "
+				String sql2 = "select distinct c1.subject, c1.section, c1.id from student s1 join student_class_relationship sc1 "
 								+ "on s1.id = sc1.student_id join class c1 on c1.id = sc1.class_id "
 								+ "where first_name = ? and last_name = ? and c1.id not in ("
 								+ "select c.id from student s join major_class_relationship mc "
