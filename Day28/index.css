@@ -1,0 +1,41 @@
+@CHARSET "ISO-8859-1";
+html { 
+  background: teal;
+}
+body {
+	opacity:0.9;
+	margin-bottom: 60px;
+}
+h3 {
+	text-align: center;
+}
+#numBox {
+	text-align: center;
+	font-weight: bold;
+}
+
+.isRed {
+    color: red;
+}
+
+.isGreen {
+    color: green;
+}
+
+.isItalic {
+    font-style: italic;
+}
+div {
+	width: 33%;
+	display: inline-block;
+	text-align: left;
+	color: navy;
+}
+
+span {
+	text-align: center;
+}
+
+h1 {
+	text-align: center;
+}
