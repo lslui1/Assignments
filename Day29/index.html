@@ -1,0 +1,42 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="index.css">
+  <title>The Slack Channel</title>
+  <script src="https://code.jquery.com/jquery-3.1.0.min.js"integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="crossorigin="anonymous"></script>
+  <script src="./js/slack.js"></script>
+  <script src="./getSlackToken.js"></script>
+  <meta name="description" content="SlackChannelAPI">
+
+</head>
+
+<body>
+	<h1>Slack Channels</h1>
+	<div>
+		<h2>CHANNELS:</h2>
+	</div>
+	<div>
+		<h2 id="postTitle">POST MESSAGES:</h2>
+	</div>
+	<div>
+	</div>
+	
+	<div id="leftBox">
+	</div>
+	<div id="rightBox">
+		<h3><textarea id="messageBox" type="text" cols="30" rows="5"></textarea>
+		<button id="postMessage" type="button">POST</button></h3>
+	</div>
+	<div id="responseArea">
+		<p>Unable to populate channel radio buttons. Please check your connection.</p>
+	</div>
+
+	<h4><br><span>Last 15 messages in selected channel (10 second refresh : Newest at the top)</span><br>
+		<textarea id="chatBox" type="text" cols="120" rows="20"></textarea>
+	</h4>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+@CHARSET "ISO-8859-1";
+
+html { 
+  background: teal;
+  background: url(./images/slack-large.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: relative;
+  min-height: 100%;
+}
+body {
+	opacity:0.9;
+	margin-bottom: 60px;
+}
+h3 {
+	text-align: left;
+}
+#rightBox {
+	text-align: left;
+	font-weight: bold;
+}
+#leftBox {
+	text-align: center;
+	font-size: 20px;
+	font-style: italic;
+}
+#postTitle {
+	text-align: left;
+}
+#responseArea {
+	font-size: 18px;
+	color: teal;
+	vertical-align: top;
+}
+h4 {
+	text-align: center;
+	font-size: 18px;
+}
+div {
+	width: 33%;
+	display: inline-block;
+	text-align: left;
+	color: navy;
+}
+span {
+	text-align: center;
+	font-weight: bold;
+}
+h1 {
+	text-align: center;
+}
+h2 {
+	text-align: center;
+}
