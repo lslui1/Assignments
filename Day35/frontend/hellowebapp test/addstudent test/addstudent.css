@@ -1,0 +1,30 @@
+@CHARSET "ISO-8859-1";
+
+html { 
+  background: beige;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: relative;
+  min-height: 100%;
+}
+body {
+	opacity:0.9;
+	margin-bottom: 60px;
+}
+h1 {
+	text-align: center;
+}
+#inputfields {
+	text-align: center;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+div {
+	width: 75%;
+	display: inline-block;
+	text-align: left;
+	color: navy;
+}

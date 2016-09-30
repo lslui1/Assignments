@@ -1,0 +1,12 @@
+ssa\controller\TestController.class
+ssa\service\IStudentService.class
+ssa\service\StudentService.class
+ssa\application\Application.class
+ssa\dao\StudentDAO.class
+ssa\controller\WebsiteController.class
+ssa\config\MvcConfig.class
+ssa\entity\Student.class
+ssa\dao\IStudentDAO.class
+ssa\entity\Major.class
+ssa\controller\StudentController.class
+ssa\config\DbConfiguration.class

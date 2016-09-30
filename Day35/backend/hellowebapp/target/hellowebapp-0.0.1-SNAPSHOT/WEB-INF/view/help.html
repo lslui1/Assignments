@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:th="http://www.thymeleaf.org" 
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+   xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8" />
+<title>Help page</title>
+</head>
+<body>
+	<p>
+	Help id: <span th:text="${id}?: 'default'"></span>
+	</p>
+	
+	<p> 
+	Help message: <span th:text="${desc}?: 'default'"></span>
+	</p>
+<p>	<a href="/about">About me</a> </p>
+<p>	<a href="/home">home</a> </p>
+</body>
+</html>
