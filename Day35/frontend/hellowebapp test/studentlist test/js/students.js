@@ -5,12 +5,13 @@ $(document).ready(function() {
     		
     	for (var i=0; i < data.length; i++) {
     			
-    		var item0 = $("<td>" + data[i].id + "</td>");
-			var item1 = $("<td>" + data[i].first_name + "</td>");
-	   		var item2 = $("<td>" + data[i].last_name + "</td>");
-	   		var item3 = $("<td>" + data[i].sat + "</td>");
-	   		var item4 = $("<td>" + data[i].gpa + "</td>");
-			var item5 = ("<td> <button> Delete </button> <button class = modify-button> Update </button></td>");
+    		var item0 = $("<td class='text-left'>" + data[i].id + "</td>");
+			var item1 = $("<td class='text-left'>" + data[i].first_name + "</td>");
+	   		var item2 = $("<td class='text-left'>" + data[i].last_name + "</td>");
+	   		var item3 = $("<td class='text-left'>" + data[i].sat + "</td>");
+	   		var item4 = $("<td class='text-left'>" + data[i].gpa + "</td>");
+			var item5 = $("<td class='text-left'>" + data[i].major_id + "</td>")
+			var item6 = $("<td class='text-left'> <button> Delete </button> <button class = modify-button> Update </button></td>");
 				
 	   		var tr = $("<tr></tr>");
 	   		tr.append( item0 );
@@ -19,6 +20,7 @@ $(document).ready(function() {
 	   		tr.append( item3 );
 	   		tr.append( item4 );
 			tr.append( item5 );
+			tr.append( item6 );
 				
    			$("#studentTable").append( tr );
    		}
