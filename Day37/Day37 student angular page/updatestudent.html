@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html ng-app="myApp" lang="en">
+<head>
+	<meta charset="utf-8" />
+	<script src="http://code.jquery.com/jquery-3.1.0.min.js" type="text/javascript"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" type="text/javascript"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="./css/updatestudent.css" />
+	<title>Student Edit Menu</title>
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+	<script src="./js/updatestudent.js"></script> 
+</head>
+
+<body ng-controller="formCtrl as ctrl">
+	<h1>Update Student Menu</h1>
+	<div class="container">
+	<form name="myForm">
+		<p>
+		<label>ID        </label>
+		<input type="text" name="aid" ng-model="aid" ng-pattern="onlyNumbers" required>
+		<span ng-show="myForm.aid.$touched && myForm.aid.$invalid">The Id is invalid.</span>
+		<br />
+		</p>
+		<p>
+		<label>First Name</label>
+		<input type="text" name="firstname" ng-model="afirst_name" ng-pattern ="onlyAlpha" required>
+		<span ng-show="myForm.firstname.$touched && myForm.firstname.$invalid">First Name is required.</span>
+		<br />
+		</p>
+		<p>
+		<label>Last Name </label>
+		<input type="text" name="lastname" ng-model="alast_name" ng-pattern ="onlyAlpha" required>
+		<span ng-show="myForm.lastname.$touched && myForm.lastname.$invalid">Last Name is required.</span>
+		<br />
+		</p>
+		<p>
+		<label>SAT       </label>
+		<input type="text" name="sat" ng-model="asat" ng-pattern="onlyNumbers" required>
+		<span ng-show="myForm.sat.$touched && myForm.sat.$invalid">SAT score is invalid.</span>
+		<br />
+		</p>
+		<p>
+		<label>GPA       </label>
+		<input type="text" name="gpa" ng-model="agpa">
+		<br />
+		</p>
+		<p>
+		<label>Major Id  </label>
+		<input type="text" name="majorid" ng-model="amajor_id">
+		<br />
+		</p>
+	</form>
+	</div>
+	<div id="buttons"><br />
+		<button id="updatestudentButton" ng-click="ctrl.updateStudent()" ng-disabled="myForm.Id.$invalid" type="button">Update Student Data</button>
+		<button id="addstudentButton" type="button">Add Student</button>
+		<button id="getstudentButton" ng-click="ctrl.getStudent()" ng-disabled="myForm.Id.$invalid" type="button">Query Student by Id</button>
+	</div>
+</body>
+</html>
