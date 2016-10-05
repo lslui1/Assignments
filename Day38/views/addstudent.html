@@ -1,0 +1,39 @@
+<link rel="stylesheet" type="text/css" href="./css/addstudent.css" />
+<h1>Add Student Menu</h1>
+<div id="pseudobody" ng-controller="addformCtrl as ctl">
+	<div class="container">
+	<form name="myForm">
+		<p>
+		<label>First Name</label>
+		<input type="text" name="firstname" ng-model="afirst_name" ng-pattern ="onlyAlpha" required>
+		<span ng-show="myForm.firstname.$touched && myForm.firstname.$invalid">First Name is required.</span>
+		<br />
+		</p>
+		<p>
+		<label>Last Name </label>
+		<input type="text" name="lastname" ng-model="alast_name" ng-pattern ="onlyAlpha" required>
+		<span ng-show="myForm.lastname.$touched && myForm.lastname.$invalid">Last Name is required.</span>
+		<br />
+		</p>
+		<p>
+		<label>SAT       </label>
+		<input type="text" name="sat" ng-model="asat" ng-pattern="onlyNumbers" required>
+		<span ng-show="myForm.sat.$touched && myForm.sat.$invalid">SAT score is invalid.</span>
+		<br />
+		</p>
+		<p>
+		<label>GPA       </label>
+		<input type="text" name="gpa" ng-model="agpa">
+		<br />
+		</p>
+		<p>
+		<label>Major Id  </label>
+		<input type="text" name="majorid" ng-model="amajor_id">
+		<br />
+		</p>
+	</form>
+	</div>
+	<div id="buttons"><br />
+		<button id="addstudentButton" ng-click="ctl.addStudent()" type="button">Add Student</button>
+	</div>
+</div>
