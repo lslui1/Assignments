@@ -1,0 +1,36 @@
+
+<link rel="stylesheet" type="text/css" href="./css/studentlist.css" />
+<body id="studentlist" ng-controller="AppCtrl as ctrl">
+<div id="bluebg">
+<div class="table-title">
+<h3>Student Table</h3>
+<div><button ng-click="ctrl.refresh()" class="refreshButton">refresh</button></div>
+</div>
+	<table id="studentTable" class="table-fill" style="width:75%">
+		<thead>
+  		<tr id="studentHeader" class="text-left">
+  			<th class="text-left">ID</th>
+    		<th class="text-left">First Name</th>
+    		<th class="text-left">Last Name</th>
+    		<th class="text-left">GPA</th>
+    		<th class="text-left">SAT</th>
+			<th class="text-left">Major Id</th>
+			<th class="text-left">Functions</th>
+    	</tr>
+		</thead>
+		<tbody class="table-hover">
+		<tr ng-init="hideValue = false" ng-hide="hideValue" ng-repeat="student in mydata" ng-show="student.vis">
+				<td>{{ student.id }}</td>
+				<td>{{ student.first_name }}</td>
+				<td>{{ student.last_name }}</td>
+				<td>{{ student.sat }}</td>
+				<td>{{ student.gpa }}</td>
+				<td>{{ student.major_id }}</td>
+				<td><button ng-click="ctrl.editStudent(student)" class="editButton">Edit</button>
+				    <button ng-click="ctrl.deleteItem(student)" class="deleteButton">Delete</button>
+					<button ng-click="hideValue = !hideValue" class="hideButton">hide</button></td>
+		</tr>
+		</tbody>
+	</table> 
+</div>
+</body>

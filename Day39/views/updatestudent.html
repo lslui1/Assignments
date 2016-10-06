@@ -1,0 +1,46 @@
+<link rel="stylesheet" type="text/css" href="./css/updatestudent.css" />
+<h1 id="pageTitle">Update Student Menu</h1>
+<div id="pseudobody" ng-controller="formCtrl as fctrl">
+	<div class="container">
+	<form name="myForm">
+		<p>
+		<label>ID        </label>
+		<input type="text" name="aid" ng-model="aid" placeholder="required" ng-pattern="onlyNumbers" required>
+		<span ng-show="myForm.aid.$touched && myForm.aid.$invalid">The Id is invalid.</span>
+		<br />
+		</p>
+		<p>
+		<label>First Name</label>
+		<input type="text" name="firstname" ng-model="afirst_name" placeholder="required" ng-pattern="onlyAlpha" required>
+		<span ng-show="myForm.firstname.$touched && myForm.firstname.$invalid">Invalid first name.</span>
+		<br />
+		</p>
+		<p>
+		<label>Last Name </label>
+		<input type="text" name="lastname" ng-model="alast_name" placeholder="required" ng-pattern="onlyAlpha" required>
+		<span ng-show="myForm.lastname.$touched && myForm.lastname.$error.pattern">Last Name cannot accept numbers and symbols.</span>
+		<br />
+		</p>
+		<p>
+		<label>SAT       </label>
+		<input type="text" name="sat" placeholder="required" ng-model="asat" ng-pattern="onlyNumbers" required>
+		<span ng-show="myForm.sat.$touched && myForm.sat.$invalid">SAT score is invalid.</span>
+		<br />
+		</p>
+		<p>
+		<label>GPA       </label>
+		<input type="text" name="gpa" placeholder="required" ng-model="agpa" required>
+		<br />
+		</p>
+		<p>
+		<label>Major Id  </label>
+		<input type="number" name="majorid" min="1" max="6" ng-model="amajor_id">
+		<br />
+		</p>
+	</form>
+	</div>
+	<div id="buttons"><br />
+		<button id="updatestudentButton" ng-click="fctrl.updateStudent()" ng-disabled="myForm.Id.$invalid" type="button">Update Student Data</button>
+		<button id="getstudentButton" ng-click="fctrl.getStudent()" ng-disabled="myForm.Id.$invalid" type="button">Query Student by Id</button>
+	</div>
+</div>
